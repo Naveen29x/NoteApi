@@ -54,7 +54,24 @@ def update_user(user_id:int,update_note:Update_note):
             single_note["is_complited"]=update_note.is_complited
             return single_note
 
-    raise HTTPException(status_code=404)        
+    raise HTTPException(status_code=404) 
+
+@app.delete("/Note/{Note_id}")
+def delete_by_id(Note_id:int):
+    for single_note in notes:
+        if single_note["id"]==Note_id:
+           notes.remove(single_note)
+           return notes
+    return{
+        "message":"failed"
+    }
+      
+
+
+
+
+
+       
      
         
     
