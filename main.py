@@ -8,7 +8,7 @@ class Note(BaseModel):
     tittle:str
     content:str
     category:str
-    is_complited:str
+    is_complited:bool
 
 notes=[]
 
@@ -19,7 +19,7 @@ def create_post(note:Note):
     new_note={
         "id":len(notes)+1,
         "tittle":note.tittle,
-        "content":note.category,
+        "content":note.content,
         "is_complcated":note.is_complited
     }
     notes.append(new_note)
@@ -34,9 +34,10 @@ def view_by_id(user_id:int):
         if single_note["id"]==user_id:
             return single_note
        
-    return {
-                "messgae":"error erorr"
-            }
+    raise HTTPException(
+        status_code=404,
+       detail="Note not found" 
+    )
 class Update_note(BaseModel):
         tittle:str
         content:str
@@ -54,7 +55,7 @@ def update_user(user_id:int,update_note:Update_note):
             single_note["is_complited"]=update_note.is_complited
             return single_note
 
-    raise HTTPException(status_code=404) 
+    raise HTTPException(status_code=404,detail="Note not found") 
 
 @app.delete("/Note/{Note_id}")
 def delete_by_id(Note_id:int):
@@ -62,9 +63,7 @@ def delete_by_id(Note_id:int):
         if single_note["id"]==Note_id:
            notes.remove(single_note)
            return notes
-    return{
-        "message":"failed"
-    }
+    raise HTTPException(status_code=404,detail="Not found")
       
 
 
